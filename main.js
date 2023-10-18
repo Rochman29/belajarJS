@@ -52,3 +52,59 @@
 //   console.log(isi);
 //   p.innerHTML = isi;
 // });
+
+let dataNotes = [];
+
+const addNote = () => {
+  let userInputData = document.getElementById("input_form");
+  let userInputValue = userInputData.value;
+
+  if (userInputValue !== "" && userInputValue !== null) {
+    dataNotes.push({ text: userInputValue, completed: false });
+    userInputData.value = "";
+
+    showNotes();
+  }
+};
+
+const showNotes = () => {
+  let showNotesElement = document.getElementById("listNotes");
+  showNotesElement.innerHTML = "";
+
+  dataNotes.forEach((note, index) => {
+    let listItem = document.createElement("li");
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = note.completed;
+    checkbox.addEventListener("change", () => {
+      toggleComplete(index);
+    });
+
+    let text = document.createElement("span");
+    text.textContent = note.text;
+    text.style.textDecoration = note.completed ? "line-through" : "none";
+
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "X";
+    deleteButton.addEventListener("click", () => {
+      deleteNotes(index);
+    });
+
+    listItem.appendChild(checkbox);
+    listItem.appendChild(text);
+    listItem.appendChild(deleteButton);
+
+    showNotesElement.appendChild(listItem);
+  });
+};
+
+const toggleComplete = (index) => {
+  dataNotes[index].completed = !dataNotes[index].completed;
+  showNotes();
+};
+
+const deleteNotes = (index) => {
+  dataNotes.splice(index, 1);
+  showNotes();
+};
